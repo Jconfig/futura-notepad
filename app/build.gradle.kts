@@ -1,6 +1,7 @@
 plugins {
   id("com.android.application")
   id("org.jetbrains.kotlin.android")
+  id("org.jetbrains.kotlin.plugin.compose")
   id("com.github.triplet.play")
   kotlin("kapt")
 }
@@ -48,7 +49,6 @@ android {
   }
 
   buildFeatures { compose = true }
-  composeOptions { kotlinCompilerExtensionVersion = "1.7.1" }
 
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
 
@@ -56,7 +56,6 @@ android {
 }
 
 play {
-  // Only configure creds when the env var is present to avoid empty path errors on CI
   val playJson = System.getenv("PLAY_SERVICE_JSON")
   if (!playJson.isNullOrBlank()) {
     serviceAccountCredentials.set(file(playJson))
