@@ -1,8 +1,7 @@
 name: Release to Play
 on:
   push:
-    tags:
-      - "v*.*.*"
+    tags: [ "v*.*.*" ]
 
 jobs:
   release:
@@ -18,6 +17,8 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.7
 
       - name: Install Android SDK
         run: |
@@ -42,7 +43,7 @@ jobs:
         run: echo '${{ secrets.PLAY_SERVICE_JSON }}' > play.json
 
       - name: Build signed release bundle
-        run: ./gradlew :app:bundleRelease
+        run: gradle :app:bundleRelease
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
@@ -53,7 +54,7 @@ jobs:
           PLAY_SERVICE_JSON: ${{ github.workspace }}/play.json
 
       - name: Upload to Play internal
-        run: ./gradlew :app:publishRelease
+        run: gradle :app:publishRelease
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
