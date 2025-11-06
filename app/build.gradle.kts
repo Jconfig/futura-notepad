@@ -37,8 +37,8 @@ android {
 
   signingConfigs {
     create("release") {
-      val storeFilePath = System.getenv("STORE_FILE") ?: ""
-      if (storeFilePath.isNotEmpty()) {
+      val storeFilePath = System.getenv("STORE_FILE")
+      if (!storeFilePath.isNullOrBlank()) {
         storeFile = file(storeFilePath)
         storePassword = System.getenv("STORE_PASSWORD")
         keyAlias = System.getenv("KEY_ALIAS")
@@ -56,7 +56,11 @@ android {
 }
 
 play {
-  serviceAccountCredentials.set(file(System.getenv("PLAY_SERVICE_JSON") ?: ""))
+  // Only configure creds when the env var is present to avoid empty path errors on CI
+  val playJson = System.getenv("PLAY_SERVICE_JSON")
+  if (!playJson.isNullOrBlank()) {
+    serviceAccountCredentials.set(file(playJson))
+  }
   track.set("internal")
   defaultToAppBundles.set(true)
 }
