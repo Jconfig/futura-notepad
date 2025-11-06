@@ -1,0 +1,5 @@
+-keep class androidx.room.** { *; }
+-keep class xyz.joydeb.futura_notepad.data.** { *; }
+-keep class com.google.mlkit.** { *; }
+-dontwarn com.google.auto.value.**
+-dontwarn org.checkerframework.**
