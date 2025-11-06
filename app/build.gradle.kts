@@ -36,16 +36,10 @@ android {
     }
   }
 
-  signingConfigs {
-    create("release") {
-      val storeFilePath = System.getenv("STORE_FILE")
-      if (!storeFilePath.isNullOrBlank()) {
-        storeFile = file(storeFilePath)
-        storePassword = System.getenv("STORE_PASSWORD")
-        keyAlias = System.getenv("KEY_ALIAS")
-        keyPassword = System.getenv("KEY_PASSWORD")
-      }
-    }
+  // Make Java compile target = 21
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
   }
 
   buildFeatures { compose = true }
@@ -53,6 +47,11 @@ android {
   packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
 
   lint { warningsAsErrors = false; abortOnError = false }
+}
+
+// Make Kotlin toolchain = 21 (applies to kapt too)
+kotlin {
+  jvmToolchain(21)
 }
 
 play {
@@ -74,9 +73,9 @@ dependencies {
   implementation("androidx.compose.ui:ui")
   implementation("androidx.compose.ui:ui-tooling-preview")
   implementation("androidx.compose.material3:material3:1.3.0")
-  implementation("com.google.android.material:material:1.12.0")
   debugImplementation("androidx.compose.ui:ui-tooling")
 
+  implementation("com.google.android.material:material:1.12.0")
   implementation("androidx.navigation:navigation-compose:2.8.3")
 
   implementation("androidx.room:room-ktx:2.7.0")
